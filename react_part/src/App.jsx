@@ -7,7 +7,7 @@ function App() {
     email: '',
     gender: '',
     date_of_birth: '',
-    // image: {}
+    image: ''
   });
 
   const handleChange = (e) => {
@@ -28,7 +28,14 @@ function App() {
 
   const addData = async (formData) => {
     try {
-      const response = await axios.post('http://127.0.0.1:8000/api/students', formData);
+      let fn = new FormData();
+      fn.append('name', formData.name);
+      fn.append('age', formData.age);
+      fn.append('email', formData.email);
+      fn.append('gender', formData.gender);
+      fn.append('date_of_birth', formData.date_of_birth);
+      fn.append('image', formData.image);
+      const response = await axios.post('http://127.0.0.1:8000/api/students', fn);
       if (response.status === 200) {
         alert(response.data.message);
       }
@@ -66,8 +73,8 @@ function App() {
         Date of Birth <br />
         <input type="date" id="date_of_birth"
           value={formData.date_of_birth} onChange={handleChange} /> <br />
-        {/* Image <br /> */}
-        {/* <input type="file" id="image" onChange={handleImageChange} /> <br /> */}
+        Image <br />
+        <input type="file" id="image" onChange={handleImageChange} /> <br />
         <button type="submit">Submit</button>
       </form>
 

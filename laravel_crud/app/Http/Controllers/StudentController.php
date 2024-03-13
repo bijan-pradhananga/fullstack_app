@@ -31,7 +31,7 @@ class StudentController extends Controller
             'email' => 'required|email|max:100',
             'gender'        => 'required|in:male,female,other', 
             'date_of_birth' => 'required|date', 
-            // 'image'         => 'required|image|mimes:jpeg,png,jpg,gif|max:2048' 
+            'image'         => 'required|image|mimes:jpeg,png,jpg,gif|max:2048' 
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -39,15 +39,17 @@ class StudentController extends Controller
                 'message' => $validator->messages()
             ],422);
         }else {
+            $image = $request->file('image');
+            $imgName = $image->getClientOriginalName();
             $student = Student::create([
                 'name'  => $request->name,
                 'age'   => $request->age,
                 'email' => $request->email,
                 'gender'        => $request->gender,
                 'date_of_birth' => $request->date_of_birth,
-                // 'image'         => $request->file('image')->getClientOriginalName()
+                'image'         => $imgName
             ]);
-            // $image = $request->file('image')->store('uploads');
+            $image->move('images/',$imgName);
         }
         if ($student) {
             return response()->json([
